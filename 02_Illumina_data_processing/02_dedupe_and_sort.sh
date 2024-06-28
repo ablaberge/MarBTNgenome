@@ -19,8 +19,6 @@ do
     gatk MarkDuplicatesSpark -I $WORK/Mar.3.4.6.p1.$i.bam \ 
         -O $WORK/dedupe/Mar.3.4.6.p1.$i"_deduped".bam  \ 
         -M $Work/dedupe/Mar.3.4.6.p1.$i"_Complexity_Metrics".txt \
-        --conf 'spark.executor.cores=50' \ 
-        --duplicate-tagging-policy OpticalOnly 
-
-        
+        --conf 'spark.executor.cores=20' \ 
+        --duplicate-tagging-policy All   
 done
