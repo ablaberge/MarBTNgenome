@@ -2,6 +2,7 @@
 #Author : Annika Laberge
 #Purpose : Map raw sequencing data to the reference genome. First data pre-processing step of GATK's germline SNP/Indel discovery pipeline.
 
+#bla bla blah
 
 #Load dependencies 
 module load bwa/0.7.17  
