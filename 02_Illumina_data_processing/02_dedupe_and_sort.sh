@@ -20,5 +20,6 @@ do
         -O $WORK/dedupe/Mar.3.4.6.p1.$i"_deduped".bam  \ 
         -M $Work/dedupe/Mar.3.4.6.p1.$i"_Complexity_Metrics".txt \
         --conf 'spark.executor.cores=20' \ 
-        --duplicate-tagging-policy All   
+        --duplicate-tagging-policy All \
+        --optical-duplicate-pixel-distance 50
 done

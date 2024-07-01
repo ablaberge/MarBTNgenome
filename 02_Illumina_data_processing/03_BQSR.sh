@@ -17,4 +17,4 @@ GENOMEDIR=/fs02/Metzger/Analysis_Active/Mar_longDNA/refs
    -R reference.fasta \
    --known-sites sites_of_variation.vcf \
    --known-sites another/optional/setOfSitesToMask.vcf \
-   -O recal_data.table
+   -O recal_data.table 
