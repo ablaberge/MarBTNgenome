@@ -6,9 +6,6 @@
 #Load dependencies 
 module load gatk/4.2.0.0 
 
-#Print stack trace
-gatk --java-options "-DGATK_STACKTRACE_ON_USER_EXCEPTION=true"
-
 #Set working directory
 WORK=/fs02/Metzger/Analysis_Active/Mar_longDNA/workingDir
 
@@ -20,9 +17,9 @@ LIST=`cat sampleIDs.txt`
 for i in $LIST
 do
     gatk MarkDuplicatesSpark -I $WORK/Mar.3.4.6.p1.$i.bam \
-        -O $WORK/deduped/Mar.3.4.6.p1.$i_deduped.bam \
-        -M $Work/deduped/Mar.3.4.6.p1.$i_Complexity_Metrics.txt \
+        -O $WORK/deduped/Mar.3.4.6.p1.$i"_"deduped.bam \
+        -M $Work/deduped/Mar.3.4.6.p1.$i"_Complexity_Metrics.txt" \
         --conf 'spark.executor.cores=20' \
-        --duplicate-tagging-policy All \
+        --duplicate-tagging-policy OpticalOnly \
         --optical-duplicate-pixel-distance 50
 done

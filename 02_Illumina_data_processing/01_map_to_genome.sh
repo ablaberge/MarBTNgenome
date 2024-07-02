@@ -26,17 +26,11 @@ ILLUMINA=/fs02/Metzger/Analysis_Active/Mar_longDNA/Illumina_data/Mar_longDNA_202
 cd $GENOMEDIR
 bwa index -a bwtsw $GENOME 
 
-#Get RG ID's to add into header during bwa mem call
-for i in $LIST
-do
-	header=$(zcat $ILLUMINA/$i"_R1_001.fastq.gz" | head -n 1)
-	id=$(echo $header | head -n 1 | cut -f 1-4 -d":" | sed 's/@//' | sed 's/:/_/g')
-	echo "Read Group @RG\tID:$id\tSM:$id"_"$i\tLB:$id"_"$i\tPL:ILLUMINA"
-done
 
 #Navigate to the correct directory
 cd $WORK/RG_Added
 
+#Get RG ID's to add into header during bwa mem call
 #Loop through data and map/sort
 for i in $LIST
 do
