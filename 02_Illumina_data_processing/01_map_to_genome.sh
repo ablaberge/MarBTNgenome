@@ -1,3 +1,5 @@
+#!/bin/sh
+
 #Date : 6/27//24 
 #Author : Annika Laberge
 #Purpose : Map raw sequencing data to the reference genome. First data pre-processing step of GATK's germline SNP/Indel discovery pipeline.
