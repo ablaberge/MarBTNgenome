@@ -32,6 +32,6 @@ for i in $LIST
 do
      gatk SortSam \
      INPUT=$WORK/deduped/Mar.3.4.6.p1."$i"_deduped.bam \
-     OUTPUT=$WORK/deduped/sorted/Mar.3.4.6.p1."$i"_deduped.bam \
+     OUTPUT=$WORK/deduped/sorted/Mar.3.4.6.p1."$i"_sorted.bam \
      SORT_ORDER=coordinate
 done
