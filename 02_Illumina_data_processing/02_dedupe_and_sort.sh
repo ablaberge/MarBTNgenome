@@ -18,7 +18,7 @@ LIST=$(cat sampleIDs.txt)
 #Dedupe and sort using MarkDuplicatesSpark
 for i in $LIST
 do
-    gatk MarkDuplicatesSpark -I $WORK/Mar.3.4.6.p1."$i".bam \
+    gatk MarkDuplicatesSpark -I $WORK/RG_Added/Mar.3.4.6.p1."$i".bam \
         -O $WORK/deduped/Mar.3.4.6.p1."$i"_deduped.bam \
         -M $WORK/deduped/Mar.3.4.6.p1."$i"_Complexity_Metrics.txt \
         --conf 'spark.executor.cores=20' \
