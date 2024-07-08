@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #Date : 7/2/24 
 #Author : Annika Laberge
@@ -23,23 +23,25 @@ DB_IMPORT=/fs02/Metzger/Analysis_Active/Mar_longDNA/workingDir/DBImport
 cd "$WORK" || exit
 LIST=$(cat sampleIDs.txt)
 
-## STEP 1: Initial variant calling with HaplotypeCaller. 
+## STEP 1: Initial variant calling with HaplotypeCaller. Threads? Parallel?
 for i in $LIST
 do
-    gatk HaplotypeCaller  \
+    gatk --java-options "-Xmx100g" HaplotypeCaller  \
         -R /fs02/Metzger/Analysis_Active/Mar_longDNA/refs/Mar.3.4.6.p1_Q30Q30A.fasta \
         -I $DEDUPED/Mar.3.4.6.p1."$i"_deduped.bam \
         -O $VARIANTS/Mar.3.4.6.p1."$i"_variants.g.vcf \
         -ERC GVCF \
         -pcr_indel_model NONE \
-        --emitRefConfidence GVCF 
+        --emitRefConfidence GVCF \
+        --native-pair-hmm-threads 10
 done
 
 ##STEP 2: Generate sample map file for step 3. 
+##Script used: https://www.biostars.org/p/452678/
 for i in $LIST
 do
     n=$(bcftools query -l $VARIANTS/Mar.3.4.6.p1."$i"_variants.g.vcf)
-    echo "${n}""$(printf'\t')"$VARIANTS/Mar.3.4.6.p1."$i"_variants.g.vcf > SAMPLE_MAPS/"$i"_sample.map
+    echo "${n}""$(printf '\t')"$VARIANTS/Mar.3.4.6.p1."$i"_variants.g.vcf > SAMPLE_MAPS/"$i"_sample.map
 done
 
 cd $SAMPLE_MAPS || exit

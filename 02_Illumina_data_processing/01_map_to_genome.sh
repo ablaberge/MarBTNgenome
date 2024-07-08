@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #Date : 6/27//24 
 #Author : Annika Laberge
@@ -17,34 +17,34 @@ GENOME=/fs02/Metzger/Analysis_Active/Mar_longDNA/refs/Mar.3.4.6.p1_Q30Q30A.fasta
 GENOMEDIR=/fs02/Metzger/Analysis_Active/Mar_longDNA/refs
 
 #Get list of sample IDs - need to cat so they're readable by bwa
-cd $WORK
-LIST=`cat sampleIDs.txt`
+cd $WORK || exit
+LIST=$(cat sampleIDs.txt)
 
 #Set directory with raw Illumina data 
 ILLUMINA=/fs02/Metzger/Analysis_Active/Mar_longDNA/Illumina_data/Mar_longDNA_2024
 
 
 #Single line bwa index 
-cd $GENOMEDIR
+cd $GENOMEDIR || exit
 bwa index -a bwtsw $GENOME 
 
 
 #Navigate to the correct directory
-cd $WORK/RG_Added
+cd $WORK/RG_Added || exit
 
 #Get RG ID's to add into header during bwa mem call
 #Loop through data and map/sort
 for i in $LIST
 do
-	header=$(zcat $ILLUMINA/$i"_R1_001.fastq.gz" | head -n 1)
-	id=$(echo $header | head -n 1 | cut -f 3-4 -d":" | sed 's/@//' | sed 's/:/_/g')
-	bwa mem -t 50 -R "@RG\tID:$id\tSM:$i\tLB:$i"_"1\tPL:ILLUMINA" $GENOME $ILLUMINA/$i"_R1_001.fastq.gz" $ILLUMINA/$i"_R2_001.fastq.gz" | samtools view -b -h -@ 10 | samtools sort -O bam -@ 10 > Mar.3.4.6.p1.$i.bam
+	header=$(zcat $ILLUMINA/"$i""_R1_001.fastq.gz" | head -n 1)
+	id=$(echo "$header" | head -n 1 | cut -f 3-4 -d":" | sed 's/@//' | sed 's/:/_/g')
+	bwa mem -t 50 -R "@RG\tID:$id\tSM:$i\tLB:$i"_1"\tPL:ILLUMINA" $GENOME $ILLUMINA/"$i""_R1_001.fastq.gz" $ILLUMINA/"$i""_R2_001.fastq.gz" | samtools view -b -h -@ 10 | samtools sort -O bam -@ 10 > Mar.3.4.6.p1."$i".bam
 done
 
 #Index data 
 for i in $LIST
 do
-	samtools index -b -@ 20 Mar.3.4.6.p1.$i.bam
+	samtools index -b -@ 20 Mar.3.4.6.p1."$i".bam
 done
 
 

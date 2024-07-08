@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #Date : 6/27//24 
 #Author : Annika Laberge
