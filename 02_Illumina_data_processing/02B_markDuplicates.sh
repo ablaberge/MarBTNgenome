@@ -17,6 +17,7 @@ cd $WORK || exit
 LIST=$(cat sampleIDs.txt)
 
 #Dedupe and sort using MarkDuplicatesSpark
+#The "&" makes the loop run in parallel and the "wait" makes all processes complete before it moves on
 for i in $LIST
 do
 gatk MarkDuplicates \
@@ -24,8 +25,10 @@ gatk MarkDuplicates \
       -O $WORK/deduped/Mar.3.4.6.p1."$i"_deduped.bam \
       -M $WORK/deduped/Mar.3.4.6.p1."$i"_Complexity_Metrics.txt \
       --duplicate-tagging-policy OpticalOnly \
-      --optical-duplicate-pixel-distance 50
+      --optical-duplicate-pixel-distance 50 \
+      &
 done
+wait
 
 #Sort output BAMs
 for i in $LIST
@@ -33,5 +36,7 @@ do
      gatk SortSam \
      INPUT=$WORK/deduped/Mar.3.4.6.p1."$i"_deduped.bam \
      OUTPUT=$WORK/deduped/sorted/Mar.3.4.6.p1."$i"_sorted.bam \
-     SORT_ORDER=coordinate
+     SORT_ORDER=coordinate \
+     &
 done
+wait
