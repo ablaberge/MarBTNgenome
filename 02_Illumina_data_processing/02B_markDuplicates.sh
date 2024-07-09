@@ -7,7 +7,8 @@
 
 
 #Load dependencies 
-module load gatk/4.2.0.0 
+module load gatk/4.2.0.0
+module load samtools/1.9  
 
 #Set working directory
 WORK=/fs02/Metzger/Analysis_Active/Mar_longDNA/workingDir
@@ -20,22 +21,23 @@ LIST=$(cat sampleIDs.txt)
 #The "&" makes the loop run in parallel and the "wait" makes all processes complete before it moves on
 for i in $LIST
 do
-gatk MarkDuplicates \
+gatk --java-options "-Xmx10g -XX:ConcGCThreads=1" MarkDuplicates \
       -I $WORK/RG_Added/Mar.3.4.6.p1."$i".bam \
-      -O $WORK/deduped/Mar.3.4.6.p1."$i"_deduped.bam \
-      -M $WORK/deduped/Mar.3.4.6.p1."$i"_Complexity_Metrics.txt \
-      --duplicate-tagging-policy OpticalOnly \
-      --optical-duplicate-pixel-distance 50 \
+      -O /ssd3/workingDir/deduped/Mar.3.4.6.p1."$i"_deduped.bam \
+      -M /ssd3/workingDir/deduped/Mar.3.4.6.p1."$i"_Complexity_Metrics.txt \
+      --TAGGING_POLICY OpticalOnly \
+      --OPTICAL_DUPLICATE_PIXEL_DISTANCE 50 \
       &
 done
 wait
 
+
 #Sort output BAMs
 for i in $LIST
 do
-     gatk SortSam \
-     INPUT=$WORK/deduped/Mar.3.4.6.p1."$i"_deduped.bam \
-     OUTPUT=$WORK/deduped/sorted/Mar.3.4.6.p1."$i"_sorted.bam \
+samtools sort \
+     INPUT=/ssd3/workingDir/deduped/Mar.3.4.6.p1."$i"_deduped.bam \
+     OUTPUT=/ssd3/workingDir/deduped/Mar.3.4.6.p1."$i"_sorted.bam \
      SORT_ORDER=coordinate \
      &
 done
