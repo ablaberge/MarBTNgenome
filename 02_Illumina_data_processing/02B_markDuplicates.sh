@@ -21,7 +21,7 @@ LIST=$(cat sampleIDs.txt)
 #The "&" makes the loop run in parallel and the "wait" makes all processes complete before it moves on
 for i in $LIST
 do
-gatk --java-options "-Xmx10g -XX:ConcGCThreads=1" MarkDuplicates \
+gatk --java-options "-Xmx7g -XX:ConcGCThreads=1" MarkDuplicates \
       -I $WORK/RG_Added/Mar.3.4.6.p1."$i".bam \
       -O /ssd3/workingDir/deduped/Mar.3.4.6.p1."$i"_deduped.bam \
       -M /ssd3/workingDir/deduped/Mar.3.4.6.p1."$i"_Complexity_Metrics.txt \
